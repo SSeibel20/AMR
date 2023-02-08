@@ -1,0 +1,5 @@
+#script info - outlines what is done in each script
+
+wrangling.R
+-read in AMR++ csv output file
+-read in megares 
