@@ -3,3 +3,10 @@
 wrangling.R
 -read in AMR++ csv output file
 -read in megares 
+-clean up row and column names
+-save gene, sample count matrix
+-look at some prelim plots
+
+prelimplot.R
+-added meta data and gene info to melted df from wrangling.R
+-examples of plots based on study questions
