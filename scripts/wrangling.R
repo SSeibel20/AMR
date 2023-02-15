@@ -14,12 +14,12 @@ out <- read.csv("amr-output/AMR_analytic_matrix.csv")
 colnames(out) <- str_split_i(colnames(out), "_", 1)
 
 #break up gene information
-genes <- as.data.frame(rownames(out))
-genes <- as.data.frame(str_split_fixed(genes$`rownames(out)`, "\\|",5))
+genes <- as.data.frame(out$X)
+genes <- as.data.frame(str_split_fixed(genes$`out$X`, "\\|",5))
 colnames(genes) <- c("MEG_ID", "Broadclass", "Class", "Mechanism", "Gene")
 
 #merge gene info with counts
-out2 <- cbind(out, genes[5])
+out2 <- cbind(out[2:ncol(out)], genes[5])
 out3 <- aggregate(.~Gene, data = out2, FUN = sum)
 out4 <- out3[2:ncol(out3)]
 rownames(out4) <-out3$Gene
@@ -32,8 +32,9 @@ library(data.table)
 
 meltdf <- melt(as.data.table(out3))
 
+#bar plot
 ggplot(meltdf %>%
-         filter(value = !="0"), aes(x=variable, fill = variable, y = value)) +
+         filter(value !="0"), aes(x=variable, fill = variable, y = value)) +
   geom_bar(stat =  "identity") +
   scale_y_log10() +
   facet_wrap(~Gene) +
@@ -42,10 +43,10 @@ ggplot(meltdf %>%
 #heatmaps
 
 ggplot(meltdf %>%
-         filter(value = !="0"), aes(x=variable, fill = log(value), y = variable)) +
+         filter(value !="0"), aes(x=Gene, fill = log(value), y = variable)) +
   geom_tile() +
   theme_bw() +
-  coord_fixed() + 
+  coord_fixed() +
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
   
 #save work
