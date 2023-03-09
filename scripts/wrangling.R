@@ -19,9 +19,11 @@ for (i in files) {
 }
 
 dat<- lapply(Sys.glob("C:\\Users/saman/OneDrive - The Pennsylvania State University/Ganda Lab/Spring 2023/AMR++ Tutorial/AMR/amr-output/Ransom_practice/*.csv"), read.csv)
-bovnames <- ls(pattern = "bov")
-humnames <- ls(pattern = "hum")
-batchnames <- list.append(bovnames, humnames)
+batchname1 <- ls(pattern = "b1")
+batchname2 <- ls(pattern = "b2")
+batchname3 <- ls(pattern = "b3")
+batchname4 <- ls(pattern = "b4")
+batchnames <- list.append(batchname1, batchname2, batchname3, batchname4)
 filename2 <- paste(batchnames, ".2", sep = "")
 
 for (i in 1:length(dat)) {
