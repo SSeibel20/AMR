@@ -1,4 +1,4 @@
-rh05_S5_L001,rh06_S6_L001,rh08_S8_L001,rh09_S9_L001,rh02_S2_L001,rh03_S3_L001,rh04_S4_L001,rh10_S10_L001,rh07_S7_L001,rh01_S1_L001,
+X,rh05_S5_L001,rh06_S6_L001,rh08_S8_L001,rh09_S9_L001,rh02_S2_L001,rh03_S3_L001,rh04_S4_L001,rh10_S10_L001,rh07_S7_L001,rh01_S1_L001
 MEG_780|Drugs|Aminoglycosides|Aminoglycoside_O-nucleotidyltransferases|ANT3-DPRIME,2,12,0,0,8,0,0,0,0,0
 MEG_1580|Drugs|Phenicol|Chloramphenicol_acetyltransferases|CATA,0,0,0,0,0,0,0,0,0,2
 MEG_2725|Multi-compound|Drug_and_biocide_resistance|Drug_and_biocide_MFS_efflux_pumps|EMRB,208,430,202,6,336,198,118,1900,102,164
