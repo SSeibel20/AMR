@@ -10,25 +10,39 @@ library(rlist)
 
 
 #read in and clean  data----
-files <- Sys.glob("C:\\Users/saman/OneDrive - The Pennsylvania State University/Ganda Lab/Spring 2023/AMR++ Tutorial/AMR/amr-output/Ransom_practice/*.csv")
+files <- Sys.glob("amr-output/Ransom_practice/Ransom*.csv")
 
 for (i in files) {
-  filename <- str_split_fixed(str_split_fixed(paste0(i), "-", 3)[,3], ".csv", 2)[1]
+  filename <- str_split_fixed(str_split_fixed(paste0(i), "_", 3)[,3], "_", 4)[1]
   wd <- paste0(i)
   assign(filename, read.csv(wd))
 }
 
-dat<- lapply(Sys.glob("C:\\Users/saman/OneDrive - The Pennsylvania State University/Ganda Lab/Spring 2023/AMR++ Tutorial/AMR/amr-output/Ransom_practice/*.csv"), read.csv)
-batchname1 <- ls(pattern = "b1")
-batchname2 <- ls(pattern = "b2")
-batchname3 <- ls(pattern = "b3")
-batchname4 <- ls(pattern = "b4")
-batchnames <- list.append(batchname1, batchname2, batchname3, batchname4)
-filename2 <- paste(batchnames, ".2", sep = "")
+#edit rownames for CSV files ----
+rownames(b1) <- b1$X
+rownames(b2) <- b2$X
+rownames(b3) <- b3$X
+rownames(b4) <- b4$X
+
+#remove extra column ----
+b1 <- b1[2:ncol(b1)]
+b2 <- b2[2:ncol(b2)]
+b3 <- b3[2:ncol(b3)]
+b4 <- b4[2:ncol(b4)]
+
+write.csv(b1, "amr-output/Ransom_practice/batch1.csv", row.names = TRUE)
+write.csv(b2, "amr-output/Ransom_practice/batch2.csv", row.names = TRUE)
+write.csv(b3, "amr-output/Ransom_practice/batch3.csv", row.names = TRUE)
+write.csv(b4, "amr-output/Ransom_practice/batch4.csv", row.names = TRUE)
+
+
+dat<- lapply(Sys.glob("amr-output/Ransom_practice/batch*.csv"), read.csv)
+batchname <- ls(pattern = "b")
+filename2 <- paste(batchname, ".2", sep = "")
 
 for (i in 1:length(dat)) {
   assign(filename2[i],
-         cbind(as.data.frame(dat[i]), as.data.frame(str_split_fixed(rownames(as.data.frame(dat[i])), "\\|", 5))[5])%>% #extract gene name from AMR++ output and add to count matrix
+         cbind(as.data.frame(dat[i])[2:ncol(as.data.frame(dat[i]))], as.data.frame(str_split_fixed(as.data.frame(dat[i])$X, "\\|", 5))[5])%>% #extract gene name from AMR++ output and add to count matrix
            aggregate(.~V5, FUN= sum))
 }
 
@@ -38,13 +52,13 @@ rownames(merged) <- merged$V5 #fix rownames so that they are the gene name
 colnames(merged) <- trimws(colnames(merged), whitespace = "_.*") #fix colnames to drop file extension
 merged_clean <- merged[2:ncol(merged)] #drop the gene name column so that its a count matrix with genes as rows and samples as columns
 
-write.table(merged_clean, file = "C:\\Users/saman/OneDrive - The Pennsylvania State University/Ganda Lab/Spring 2023/AMR++ Tutorial/AMR/amr-output/Ransom_practice/tables/countmatrix-cleanedall.txt", sep = "\t") #save this matrix
+write.table(merged_clean, file = "tables/countmatrix-cleanedall.txt", sep = "\t") #save this matrix
 
 #break up gene information for all batches (batch1 - batch n) - this will be useful later ----
 genes <- data.frame()
 
 for (i in 1:length(dat)) {
-  genes <- rbind(genes, do.call(rbind, as.list(rownames(dat[[i]])))) %>% #add all rownames togther as a single column df
+  genes <- rbind(genes, do.call(rbind, as.list(as.data.frame(dat[i])$X))) %>% #add all rownames togther as a single column df
     unique() #remove redundant rows
 }
 
