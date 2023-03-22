@@ -1,14 +1,16 @@
 #Integration of AMR++ output into phyloseq object for downstream analysis 
 #Samantha Seibel- 3/15/23 
 
-#laod packges
+#install phyloseq and vegan----
+BiocManager::install("phyloseq")
+BiocManager::install("vegan", force = TRUE)
+
+#load packges----
 library(BiocManager)
 library(stringr)
 library(tidyverse)
 library(tidylog)
-BiocManager::install("phyloseq")
 library(phyloseq)
-BiocManager::install("vegan", force = TRUE)
 library(vegan) # version 2.6-4
 library(ggplot2)
 library(readxl)
