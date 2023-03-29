@@ -1,5 +1,5 @@
 #decontam
-#Samantha Seibel- 03/22/23
+#Samantha Seibel- 03/29/23
 
 #install microViz and decontam----
 if (!requireNamespace("BiocManager", quietly = TRUE)) install.packages("BiocManager")
@@ -65,13 +65,23 @@ negps <- subset_samples(conps, is.neg == "TRUE")
 con
 
 #remove contaminant sequences
-nocontam <- prune_taxa(!rownames(ps@tax_table) %in% contams, ps)
+#looking in our ps object to look for the genes that are contaminated, and removing them exactly as they are
+nocontam <- tax_select(ps, tax_list = con, strict_matches = TRUE, deselect = TRUE)
 
-#Sophia will figure this out
-ps_filter(ps, )
+controls <- ps %>%
+  ps_filter(SampleBinary == "Control", .keep_all_taxa = TRUE) 
+
+controls <- sample_data(controls)$SampleID
 
 #remove all controls
-nocontrol <- prune_samples(!str_detect(, rownames(nocontam@sam_data)), nocontam)
+nocontrol <- ps_filter(nocontam, SampleBinary != "Control")
+
+#removing SNP confirmation genes----
+psfilt <- ps %>% tax_select(tax_list = "SNP", strict_matches = FALSE, deselect = TRUE)
+taxa_names(psfilt)
+taxa_names(nocontrol)
+
+saveRDS(psfilt, "data/psfilt-presabs.rds")
 
 #save work----
 save.image("data/decontam.RData")
